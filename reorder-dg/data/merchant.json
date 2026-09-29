@@ -1,0 +1,14 @@
+{
+  "id": "dg-delivery-lecce",
+  "name": "DG Delivery",
+  "tagline": "Dettaglio e ingrosso di bevande",
+  "address": "Via di Leuca 239 D, Lecce",
+  "phone": "+393299680543",
+  "email": "dgdeliverylecce@gmail.com",
+  "same_day_delivery": true,
+  "source": {
+    "catalog_url": "https://dgdelivery.altervista.org/prezzi-bibiteinclusa-consegna-a-domicilio/",
+    "catalog_published": "2025-05-13",
+    "note": "POC basato su listino pubblico; prezzi e disponibilita vanno confermati dal commerciante prima dell'uso reale."
+  }
+}
