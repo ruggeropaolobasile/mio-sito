@@ -1,0 +1,9 @@
+{
+  "name":"DG Delivery — Reorder POC",
+  "short_name":"DG Reorder",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#f4f6f4",
+  "theme_color":"#143e2b",
+  "icons":[]
+}
