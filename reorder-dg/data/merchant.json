@@ -6,9 +6,14 @@
   "phone": "+393299680543",
   "email": "dgdeliverylecce@gmail.com",
   "same_day_delivery": true,
+  "delivery_policy": {
+    "same_day_subject_to_confirmation": true,
+    "floor_delivery_subject_to_confirmation": true,
+    "floor_delivery_note": "Consegna al piano senza ascensore: DG Delivery confermerà la fattibilità in base a piano, quantità e accesso."
+  },
   "source": {
     "catalog_url": "https://dgdelivery.altervista.org/prezzi-bibiteinclusa-consegna-a-domicilio/",
     "catalog_published": "2025-05-13",
-    "note": "POC basato su listino pubblico; prezzi e disponibilita vanno confermati dal commerciante prima dell'uso reale."
+    "note": "POC basato su listino storico pubblico; prezzi, disponibilita e condizioni di consegna vanno confermati dal commerciante prima dell'uso reale."
   }
 }
