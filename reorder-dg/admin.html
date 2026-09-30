@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>DG Delivery — Admin demo</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6f4;color:#17201c}
+    nav{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 14px;background:#0d2d1e;color:white;flex-wrap:wrap}nav a{color:white;text-decoration:none;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.12)}nav a.active{background:white;color:#143e2b;font-weight:800}
+    header{background:#143e2b;color:white;padding:26px 18px}.wrap{max-width:1050px;margin:auto}.notice{background:#fff7df;border:1px solid #ead59b;border-radius:14px;padding:13px;margin:16px 0;color:#5f4b16}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat,.panel,.order{background:white;border:1px solid #dce4de;border-radius:16px;padding:15px}.stat strong{display:block;font-size:1.8rem}.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}.orders{display:grid;gap:10px}.order-top{display:flex;justify-content:space-between;gap:10px}.badge{font-size:.72rem;font-weight:850;background:#fff3d1;color:#604800;border-radius:999px;padding:5px 8px;height:max-content}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button{border:0;border-radius:10px;padding:9px 11px;font-weight:800;background:#e7eee9;color:#143e2b}.primary{background:#143e2b;color:white}
+    label{display:grid;gap:6px;margin:12px 0;font-size:.85rem}select,textarea{width:100%;padding:11px;border:1px solid #ccd8d0;border-radius:10px;font:inherit}.muted{color:#68756e;font-size:.85rem}.empty{padding:28px;text-align:center;border:1px dashed #ccd8d0;border-radius:14px;color:#68756e}
+    @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <nav>
+    <strong>DG Reorder · Admin</strong>
+    <div><a href="public.html">Esterno</a> <a href="index.html">Cliente</a> <a href="admin.html" class="active">Admin DG</a></div>
+  </nav>
+  <header><div class="wrap"><div style="font-size:.75rem;font-weight:900;letter-spacing:.12em;opacity:.75">AREA ESERCENTE · DEMO</div><h1>Ordini e consegne</h1><p>Gestione operativa separata dalla vista cliente.</p></div></header>
+  <main class="wrap" style="padding:0 16px 30px">
+    <div class="notice"><strong>Demo locale:</strong> nessun login reale e nessun backend. Serve a validare il flusso admin prima di costruire Supabase/auth.</div>
+    <section class="stats">
+      <div class="stat"><span class="muted">Nuovi</span><strong id="newCount">1</strong></div>
+      <div class="stat"><span class="muted">Accettati</span><strong id="acceptedCount">0</strong></div>
+      <div class="stat"><span class="muted">Pronti</span><strong id="readyCount">0</strong></div>
+      <div class="stat"><span class="muted">Consegnati</span><strong id="doneCount">0</strong></div>
+    </section>
+    <section class="grid">
+      <div>
+        <h2>Ordini</h2>
+        <div id="orders" class="orders"></div>
+      </div>
+      <aside class="panel">
+        <h3>Regole consegna</h3>
+        <label>Consegna in giornata<select id="sameDay"><option value="yes">Attiva</option><option value="no">Disattiva</option></select></label>
+        <label>Piani senza ascensore<select id="stairs"><option value="confirm">Conferma caso per caso</option><option value="door">Solo portone</option><option value="yes">Accetta</option></select></label>
+        <label>Nota operativa<textarea id="note" placeholder="Es. 3° piano senza ascensore: chiamare prima"></textarea></label>
+        <button id="save" class="primary">Salva impostazioni demo</button>
+      </aside>
+    </section>
+  </main>
+  <script>
+    var order={id:'DG-DEMO01',name:'Cliente demo',address:'Via Demo 10, Lecce',access:'3° piano · senza ascensore · consegna al piano',items:'4 × Acqua naturale',total:'€10,00',status:'new'};
+    try{var saved=JSON.parse(localStorage.getItem('dg-admin-order'));if(saved)order=saved;}catch(e){}
+    function render(){
+      var labels={new:'Nuovo',accepted:'Accettato',ready:'Pronto',done:'Consegnato'};
+      document.getElementById('newCount').textContent=order.status==='new'?1:0;
+      document.getElementById('acceptedCount').textContent=order.status==='accepted'?1:0;
+      document.getElementById('readyCount').textContent=order.status==='ready'?1:0;
+      document.getElementById('doneCount').textContent=order.status==='done'?1:0;
+      var next='';
+      if(order.status==='new')next='<button class="primary" onclick="move(\'accepted\')">Accetta</button>';
+      if(order.status==='accepted')next='<button class="primary" onclick="move(\'ready\')">Segna pronto</button>';
+      if(order.status==='ready')next='<button class="primary" onclick="move(\'done\')">Segna consegnato</button>';
+      document.getElementById('orders').innerHTML='<article class="order"><div class="order-top"><div><strong>'+order.id+'</strong><div>'+order.name+' · '+order.address+'</div><div class="muted">'+order.access+'</div></div><span class="badge">'+labels[order.status]+'</span></div><p>'+order.items+' · <strong>'+order.total+'</strong></p><div class="actions">'+next+'<button onclick="resetOrder()">Reset demo</button></div></article>';
+    }
+    function move(s){order.status=s;localStorage.setItem('dg-admin-order',JSON.stringify(order));render()}
+    function resetOrder(){order.status='new';localStorage.setItem('dg-admin-order',JSON.stringify(order));render()}
+    try{var settings=JSON.parse(localStorage.getItem('dg-admin-settings')||'{}');document.getElementById('sameDay').value=settings.sameDay||'yes';document.getElementById('stairs').value=settings.stairs||'confirm';document.getElementById('note').value=settings.note||'';}catch(e){}
+    document.getElementById('save').onclick=function(){localStorage.setItem('dg-admin-settings',JSON.stringify({sameDay:document.getElementById('sameDay').value,stairs:document.getElementById('stairs').value,note:document.getElementById('note').value}));alert('Impostazioni demo salvate')};
+    render();
+  </script>
+</body>
+</html>
