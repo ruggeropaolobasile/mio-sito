@@ -11,14 +11,19 @@
 <body>
   <header class="hero">
     <div>
-      <div class="eyebrow">REORDER POC</div>
+      <div class="eyebrow">REORDER POC · v0.2</div>
       <h1 id="merchantName">DG Delivery</h1>
       <p id="tagline">Dettaglio e ingrosso di bevande</p>
     </div>
-    <div class="same-day">Consegna in giornata</div>
+    <div class="same-day">Consegna in giornata*</div>
   </header>
 
   <main>
+    <section class="notice" role="note">
+      <strong>Demo commerciale.</strong>
+      <span>Listino, disponibilità e condizioni di consegna devono essere confermati da DG Delivery.</span>
+    </section>
+
     <section class="panel filters">
       <input id="search" type="search" placeholder="Cerca acqua, birra, Coca-Cola..." aria-label="Cerca prodotti" />
       <div id="categories" class="chips"></div>
@@ -37,26 +42,73 @@
 
   <aside id="cart" class="cart hidden" aria-live="polite">
     <div class="cart-head">
-      <div><strong>Il tuo ordine</strong><div id="cartCount" class="muted"></div></div>
-      <button id="closeCart" class="icon">×</button>
+      <div><strong>La tua richiesta</strong><div id="cartCount" class="muted"></div></div>
+      <button id="closeCart" class="icon" aria-label="Chiudi">×</button>
     </div>
+
     <div id="cartItems"></div>
-    <div class="cart-total"><span>Totale</span><strong id="cartTotal">€0,00</strong></div>
-    <div class="customer-grid">
-      <input id="customerName" placeholder="Nome" autocomplete="name" />
-      <input id="customerAddress" placeholder="Indirizzo di consegna" autocomplete="street-address" />
-      <select id="slot">
-        <option value="Oggi - prima fascia disponibile">Oggi - prima fascia disponibile</option>
-        <option value="Oggi 16:00-18:00">Oggi 16:00-18:00</option>
-        <option value="Domani mattina">Domani mattina</option>
-      </select>
-      <textarea id="notes" placeholder="Note (citofono, piano, sostituzioni...)"></textarea>
+    <div class="cart-total"><span>Totale indicativo</span><strong id="cartTotal">€0,00</strong></div>
+
+    <div class="form-section">
+      <div class="form-title">Cliente</div>
+      <div class="customer-grid">
+        <input id="customerName" placeholder="Nome" autocomplete="name" />
+        <input id="customerAddress" placeholder="Indirizzo di consegna" autocomplete="street-address" />
+      </div>
     </div>
-    <button id="checkout" class="primary">Prepara ordine WhatsApp</button>
-    <p class="fineprint">POC dimostrativo: nessun ordine viene inviato automaticamente.</p>
+
+    <div class="form-section">
+      <div class="form-title">Accesso alla consegna</div>
+      <div class="two-cols">
+        <label>
+          <span>Piano</span>
+          <select id="floor">
+            <option value="0">Piano terra</option>
+            <option value="1">1° piano</option>
+            <option value="2">2° piano</option>
+            <option value="3">3° piano</option>
+            <option value="4">4° piano</option>
+            <option value="5+">5° piano o superiore</option>
+          </select>
+        </label>
+        <label>
+          <span>Ascensore</span>
+          <select id="elevator">
+            <option value="not_needed">Non serve</option>
+            <option value="yes">Sì</option>
+            <option value="no">No</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        <span>Consegna richiesta</span>
+        <select id="dropoff">
+          <option value="door">Al portone / ingresso</option>
+          <option value="floor">Al piano</option>
+        </select>
+      </label>
+
+      <div id="accessWarning" class="access-warning hidden"></div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-title">Quando</div>
+      <div class="customer-grid">
+        <select id="slot">
+          <option value="Oggi - prima fascia disponibile">Oggi - prima fascia disponibile</option>
+          <option value="Oggi 16:00-18:00">Oggi 16:00-18:00</option>
+          <option value="Domani mattina">Domani mattina</option>
+        </select>
+        <textarea id="notes" placeholder="Note: citofono, interno, sostituzioni, accesso..."></textarea>
+      </div>
+    </div>
+
+    <button id="checkout" class="primary">Prepara richiesta WhatsApp</button>
+    <p class="fineprint">DG Delivery confermerà disponibilità, prezzo finale e fattibilità della consegna al piano prima della consegna.</p>
   </aside>
 
-  <button id="openCart" class="fab hidden"><span id="fabCount">0</span> Apri ordine</button>
+  <button id="openCart" class="fab hidden"><span id="fabCount">0</span> Apri richiesta</button>
 
   <template id="productTpl">
     <article class="card">
