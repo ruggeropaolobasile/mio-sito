@@ -2,11 +2,17 @@ const state={merchant:null,products:[],cart:{},category:'Tutti',query:''};
 const euro=n=>new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(Number(n||0));
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sbClient=window.supabase?window.supabase.createClient(REORDER_CONFIG.supabaseUrl,REORDER_CONFIG.publishableKey):null;
 
 async function api(path,options={}){
+  let token=REORDER_CONFIG.publishableKey;
+  if(sbClient){
+    const {data}=await sbClient.auth.getSession();
+    token=data.session?.access_token||token;
+  }
   const res=await fetch(REORDER_CONFIG.supabaseUrl+path,{
     ...options,
-    headers:{...REORDER_API_HEADERS(),...(options.headers||{})}
+    headers:{apikey:REORDER_CONFIG.publishableKey,Authorization:'Bearer '+token,'Content-Type':'application/json',...(options.headers||{})}
   });
   if(!res.ok){
     const detail=await res.text();
@@ -45,7 +51,7 @@ async function boot(){
   $('#reorderBtn').onclick=reorderLast;
   ['floor','elevator','dropoff'].forEach(id=>$('#'+id).addEventListener('change',updateAccessWarning));
 
-  renderProducts();renderCart();restoreLast();updateAccessWarning();
+  renderProducts();renderCart();restoreLast();updateAccessWarning();restorePendingReorder();
   if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 
@@ -165,6 +171,25 @@ async function submitOrder(){
 }
 
 function restoreLast(){const raw=localStorage.getItem('reorder:last');$('#reorderBtn').classList.toggle('hidden',!raw);}
+
+function restorePendingReorder(){
+  try{
+    const raw=localStorage.getItem('reorder:pending-cart');
+    if(!raw)return;
+    const p=JSON.parse(raw);
+    state.cart={...p.cart};
+    $('#customerName').value=p.name||'';
+    $('#customerPhone').value=p.phone||'';
+    $('#customerAddress').value=p.address||'';
+    $('#floor').value=p.floor||'0';
+    $('#elevator').value=p.elevator||'not_needed';
+    $('#dropoff').value=p.dropoff||'door';
+    $('#slot').value=p.slot||$('#slot').value;
+    $('#notes').value=p.notes||'';
+    localStorage.removeItem('reorder:pending-cart');
+    renderCart();updateAccessWarning();$('#cart').classList.remove('hidden');
+  }catch(e){localStorage.removeItem('reorder:pending-cart');}
+}
 
 function reorderLast(){
   try{
