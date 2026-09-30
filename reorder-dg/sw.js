@@ -1,5 +1,8 @@
-const CACHE='dg-reorder-v2';
-const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./data/merchant.json','./data/products.json'];
+const CACHE='reorder-v4';
+const ASSETS=[
+  './','./index.html','./public.html','./client.html','./admin.html',
+  './styles.css','./config.js','./app.js','./client.js','./admin.js','./manifest.webmanifest'
+];
 
 self.addEventListener('install',event=>{
   self.skipWaiting();
@@ -16,27 +19,19 @@ self.addEventListener('activate',event=>{
 
 self.addEventListener('fetch',event=>{
   const req=event.request;
+  if(req.method!=='GET')return;
   const url=new URL(req.url);
-  const networkFirst=req.mode==='navigate'||url.pathname.endsWith('.json');
+  const isNavigation=req.mode==='navigate';
+  const isLocal=url.origin===location.origin;
 
-  if(networkFirst){
+  if(isNavigation || (isLocal && ['.js','.css','.html'].some(ext=>url.pathname.endsWith(ext)))){
     event.respondWith(
       fetch(req)
-        .then(res=>{
-          const copy=res.clone();
-          caches.open(CACHE).then(cache=>cache.put(req,copy));
-          return res;
-        })
+        .then(res=>{const copy=res.clone();caches.open(CACHE).then(cache=>cache.put(req,copy));return res;})
         .catch(()=>caches.match(req).then(cached=>cached||caches.match('./index.html')))
     );
     return;
   }
 
-  event.respondWith(
-    caches.match(req).then(cached=>cached||fetch(req).then(res=>{
-      const copy=res.clone();
-      caches.open(CACHE).then(cache=>cache.put(req,copy));
-      return res;
-    }))
-  );
+  event.respondWith(caches.match(req).then(cached=>cached||fetch(req)));
 });
