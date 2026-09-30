@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#143e2b" />
-  <title>DG Delivery — Lecce</title>
+  <title>REORDER</title>
   <style>
     *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6f4;color:#17201c}
     header{background:#143e2b;color:white;padding:38px 18px}.wrap{max-width:950px;margin:auto}h1{font-size:clamp(2.1rem,8vw,4rem);line-height:1;margin:8px 0 14px}.eyebrow{font-size:.75rem;font-weight:900;letter-spacing:.14em;opacity:.75}
@@ -16,26 +16,46 @@
 <body>
   <header>
     <div class="wrap">
-      <div class="eyebrow">DG DELIVERY · LECCE</div>
-      <h1>Bevande a domicilio, in modo semplice.</h1>
-      <p>Consulta il catalogo e prepara una richiesta su WhatsApp.</p>
+      <div class="eyebrow" id="merchantEyebrow">REORDER</div>
+      <h1>Ordina in modo semplice.</h1>
+      <p id="merchantIntro">Caricamento merchant...</p>
       <div class="cta">
-        <a class="primary" href="index.html">Ordina senza registrazione</a>
-        <a class="secondary" href="https://wa.me/393299680543">WhatsApp DG Delivery</a>
+        <a class="primary" id="guestLink" href="index.html">Ordina senza registrazione</a>
+        <a class="secondary" id="waLink" href="#">WhatsApp</a>
       </div>
     </div>
   </header>
   <main>
-    <div class="notice"><strong>Accesso esterno:</strong> nessun account richiesto. Prezzi, disponibilità e condizioni di consegna vengono confermati da DG.</div>
+    <div class="notice"><strong>Accesso esterno:</strong> nessun account richiesto. Prezzi, disponibilità e condizioni di consegna vengono confermati dal commerciante.</div>
     <section class="grid">
-      <article class="card"><div class="eyebrow">CATALOGO</div><h2>Scegli</h2><p>Acqua, bibite, birra e altre bevande in una vista mobile-first.</p></article>
+      <article class="card"><div class="eyebrow">CATALOGO</div><h2>Scegli</h2><p>Prodotti e prezzi vengono caricati dal tenant selezionato.</p></article>
       <article class="card"><div class="eyebrow">CONSEGNA</div><h2>Specifica</h2><p>Indirizzo, piano, ascensore e consegna al piano vengono comunicati prima.</p></article>
-      <article class="card"><div class="eyebrow">WHATSAPP</div><h2>Invia</h2><p>La richiesta arriva a DG già ordinata e leggibile.</p></article>
+      <article class="card"><div class="eyebrow">WHATSAPP</div><h2>Invia</h2><p>L'ordine viene registrato nel backend e poi riepilogato su WhatsApp.</p></article>
     </section>
     <div class="footer">
-      <p><strong>DG Delivery</strong> · Via di Leuca 239 D, Lecce</p>
-      <p class="admin">Sei DG? <a href="admin.html">Apri area amministrazione demo</a></p>
+      <p id="merchantFooter"><strong>REORDER</strong></p>
+      <p class="admin">Cliente registrato? <a id="clientLink" href="client.html">Area cliente</a> · Merchant? <a id="adminLink" href="admin.html">Area admin</a></p>
     </div>
   </main>
+
+  <script src="config.js"></script>
+  <script>
+    (async function(){
+      const tenant=REORDER_TENANT();
+      const url=REORDER_CONFIG.supabaseUrl+'/rest/v1/reorder_merchants?slug=eq.'+encodeURIComponent(tenant)+'&active=eq.true&select=slug,name,phone,address';
+      const res=await fetch(url,{headers:REORDER_API_HEADERS()});
+      if(!res.ok)return;
+      const rows=await res.json(); if(!rows.length)return;
+      const m=rows[0];
+      document.title=m.name+' — REORDER';
+      document.getElementById('merchantEyebrow').textContent=m.name.toUpperCase();
+      document.getElementById('merchantIntro').textContent=(m.address||'')+' · catalogo e ordini online.';
+      document.getElementById('merchantFooter').innerHTML='<strong>'+m.name+'</strong> · '+(m.address||'');
+      document.getElementById('waLink').href='https://wa.me/'+(m.phone||'').replace(/\D/g,'');
+      document.getElementById('guestLink').href=REORDER_WITH_TENANT('index.html');
+      document.getElementById('clientLink').href=REORDER_WITH_TENANT('client.html');
+      document.getElementById('adminLink').href=REORDER_WITH_TENANT('admin.html');
+    })();
+  </script>
 </body>
 </html>
