@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#143e2b" />
+  <title>REORDER — Area cliente</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="rolebar">
+    <strong>REORDER · Cliente registrato</strong>
+    <nav>
+      <a data-tenant-link="public.html" href="public.html">Esterno</a>
+      <a data-tenant-link="index.html" href="index.html">Ordina guest</a>
+      <a href="client.html" class="active">Cliente</a>
+      <a data-tenant-link="admin.html" href="admin.html">Admin</a>
+    </nav>
+  </div>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">AREA CLIENTE</div>
+      <h1 id="merchantName">REORDER</h1>
+      <p>Storico ordini e riordino rapido.</p>
+    </div>
+    <div class="same-day" id="sessionBadge">Non autenticato</div>
+  </header>
+
+  <main>
+    <section id="authPanel" class="panel">
+      <h2>Accedi</h2>
+      <p class="muted">L'account cliente serve solo per storico e riordino. Puoi sempre ordinare senza registrazione dalla vista guest.</p>
+      <div class="customer-grid">
+        <input id="email" type="email" placeholder="Email" autocomplete="email" />
+        <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+      </div>
+      <div class="public-actions">
+        <button id="signIn" class="primary">Accedi</button>
+        <button id="signUp" class="ghost">Crea account</button>
+      </div>
+      <p id="authMessage" class="muted"></p>
+    </section>
+
+    <section id="clientPanel" class="hidden">
+      <div class="section-head">
+        <div>
+          <h2>I tuoi ordini</h2>
+          <p class="muted">Gli ordini registrati mentre sei autenticato compaiono qui.</p>
+        </div>
+        <div class="public-actions">
+          <a id="newOrder" class="primary-link" href="index.html">Nuovo ordine</a>
+          <button id="signOut" class="ghost">Esci</button>
+        </div>
+      </div>
+
+      <div id="orders" class="order-list"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="client.js" defer></script>
+</body>
+</html>
