@@ -4,37 +4,38 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#143e2b" />
-  <title>DG Delivery — Area cliente</title>
+  <title>REORDER — Ordina</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 14px;background:#0d2d1e;color:white;font-size:14px;flex-wrap:wrap">
-    <strong>DG Reorder · Cliente</strong>
-    <nav style="display:flex;gap:8px;flex-wrap:wrap">
-      <a href="public.html" style="color:white;text-decoration:none;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.12)">Esterno</a>
-      <a href="index.html" style="color:#143e2b;text-decoration:none;padding:6px 9px;border-radius:999px;background:white;font-weight:800">Cliente</a>
-      <a href="admin.html" style="color:white;text-decoration:none;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.12)">Admin DG</a>
+  <div class="rolebar">
+    <strong>REORDER · ordine senza registrazione</strong>
+    <nav>
+      <a data-tenant-link="public.html" href="public.html">Esterno</a>
+      <a href="index.html" class="active">Ordina</a>
+      <a data-tenant-link="client.html" href="client.html">Cliente</a>
+      <a data-tenant-link="admin.html" href="admin.html">Admin</a>
     </nav>
   </div>
 
   <header class="hero">
     <div>
-      <div class="eyebrow">AREA CLIENTE · v0.3</div>
-      <h1 id="merchantName">DG Delivery</h1>
-      <p id="tagline">Dettaglio e ingrosso di bevande</p>
+      <div class="eyebrow">ORDINE GUEST · BACKEND REALE</div>
+      <h1 id="merchantName">REORDER</h1>
+      <p id="tagline">Caricamento...</p>
     </div>
-    <div class="same-day">Consegna in giornata*</div>
+    <div class="same-day">Consegna da confermare</div>
   </header>
 
   <main>
     <section class="notice" role="note">
-      <strong>Vista cliente.</strong>
-      <span>Puoi preparare l'ordine e riordinare; il listino resta demo finché DG non lo conferma.</span>
+      <strong>Nessuna registrazione.</strong>
+      <span>L'ordine viene registrato nel sistema e poi puoi inviare il riepilogo al commerciante via WhatsApp.</span>
     </section>
 
     <section class="panel filters">
-      <input id="search" type="search" placeholder="Cerca acqua, birra, Coca-Cola..." aria-label="Cerca prodotti" />
+      <input id="search" type="search" placeholder="Cerca prodotti..." aria-label="Cerca prodotti" />
       <div id="categories" class="chips"></div>
     </section>
 
@@ -61,7 +62,8 @@
     <div class="form-section">
       <div class="form-title">Cliente</div>
       <div class="customer-grid">
-        <input id="customerName" placeholder="Nome" autocomplete="name" />
+        <input id="customerName" placeholder="Nome e cognome" autocomplete="name" />
+        <input id="customerPhone" type="tel" placeholder="Telefono" autocomplete="tel" />
         <input id="customerAddress" placeholder="Indirizzo di consegna" autocomplete="street-address" />
       </div>
     </div>
@@ -69,35 +71,18 @@
     <div class="form-section">
       <div class="form-title">Accesso alla consegna</div>
       <div class="two-cols">
-        <label>
-          <span>Piano</span>
-          <select id="floor">
-            <option value="0">Piano terra</option>
-            <option value="1">1° piano</option>
-            <option value="2">2° piano</option>
-            <option value="3">3° piano</option>
-            <option value="4">4° piano</option>
-            <option value="5+">5° piano o superiore</option>
-          </select>
-        </label>
-        <label>
-          <span>Ascensore</span>
-          <select id="elevator">
-            <option value="not_needed">Non serve</option>
-            <option value="yes">Sì</option>
-            <option value="no">No</option>
-          </select>
-        </label>
+        <label><span>Piano</span><select id="floor">
+          <option value="0">Piano terra</option><option value="1">1° piano</option><option value="2">2° piano</option>
+          <option value="3">3° piano</option><option value="4">4° piano</option><option value="5+">5° piano o superiore</option>
+        </select></label>
+        <label><span>Ascensore</span><select id="elevator">
+          <option value="not_needed">Non serve</option><option value="yes">Sì</option><option value="no">No</option>
+        </select></label>
       </div>
 
-      <label>
-        <span>Consegna richiesta</span>
-        <select id="dropoff">
-          <option value="door">Al portone / ingresso</option>
-          <option value="floor">Al piano</option>
-        </select>
-      </label>
-
+      <label><span>Consegna richiesta</span><select id="dropoff">
+        <option value="door">Al portone / ingresso</option><option value="floor">Al piano</option>
+      </select></label>
       <div id="accessWarning" class="access-warning hidden"></div>
     </div>
 
@@ -113,8 +98,8 @@
       </div>
     </div>
 
-    <button id="checkout" class="primary">Prepara richiesta WhatsApp</button>
-    <p class="fineprint">DG Delivery confermerà disponibilità, prezzo finale e fattibilità della consegna al piano prima della consegna.</p>
+    <button id="checkout" class="primary">Registra ordine e prepara WhatsApp</button>
+    <p class="fineprint">Prezzo finale, disponibilità e fattibilità della consegna vengono confermati dal commerciante.</p>
   </aside>
 
   <button id="openCart" class="fab hidden"><span id="fabCount">0</span> Apri richiesta</button>
@@ -128,6 +113,7 @@
     </article>
   </template>
 
+  <script src="config.js"></script>
   <script src="app.js" defer></script>
 </body>
 </html>
