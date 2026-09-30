@@ -4,14 +4,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#143e2b" />
-  <title>DG Delivery — Reorder POC</title>
+  <title>DG Delivery — Area cliente</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 14px;background:#0d2d1e;color:white;font-size:14px;flex-wrap:wrap">
+    <strong>DG Reorder · Cliente</strong>
+    <nav style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="public.html" style="color:white;text-decoration:none;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.12)">Esterno</a>
+      <a href="index.html" style="color:#143e2b;text-decoration:none;padding:6px 9px;border-radius:999px;background:white;font-weight:800">Cliente</a>
+      <a href="admin.html" style="color:white;text-decoration:none;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.12)">Admin DG</a>
+    </nav>
+  </div>
+
   <header class="hero">
     <div>
-      <div class="eyebrow">REORDER POC · v0.2</div>
+      <div class="eyebrow">AREA CLIENTE · v0.3</div>
       <h1 id="merchantName">DG Delivery</h1>
       <p id="tagline">Dettaglio e ingrosso di bevande</p>
     </div>
@@ -20,8 +29,8 @@
 
   <main>
     <section class="notice" role="note">
-      <strong>Demo commerciale.</strong>
-      <span>Listino, disponibilità e condizioni di consegna devono essere confermati da DG Delivery.</span>
+      <strong>Vista cliente.</strong>
+      <span>Puoi preparare l'ordine e riordinare; il listino resta demo finché DG non lo conferma.</span>
     </section>
 
     <section class="panel filters">
